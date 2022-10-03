@@ -19,7 +19,7 @@ function App() {
     try {
 
 
-      const response = await fetch('https://swapi.dev/api/films')
+      const response = await fetch('https://react-movie-2787c-default-rtdb.firebaseio.com/movies.json')
       const data = await response.json();
 
       if (!response.ok) {
@@ -28,19 +28,20 @@ function App() {
 
       }
 
+      const loadedMovies = []
 
 
-      const moviesData = data.results.map((item) => {
+      for (const item in data) {
+        loadedMovies.push({
+          id: data,
+          title: data[item].title,
+          openingText: data[item].text,
+          date: data[item].date
+        })
 
+      }
 
-        return {
-          id: item.episode_id,
-          title: item.title,
-          openingText: item.opening_crawl,
-          releaseDate: item.release_date
-        }
-      })
-      setMovies(moviesData)
+      setMovies(loadedMovies)
 
 
 
@@ -59,14 +60,22 @@ function App() {
 
   useEffect(() => {
     fetchMoviesHandler()
-    console.log('hello');
+
 
   }, [fetchMoviesHandler])
+
+  async function movieAddHandler(movie) {
+    const resp = await fetch("https://react-movie-2787c-default-rtdb.firebaseio.com/movies.json", {
+      method: "POST",
+      body: JSON.stringify(movie)
+    })
+    fetchMoviesHandler()
+  }
 
 
   return (
     <React.Fragment>
-      <MovieForm />
+      <MovieForm onAddMovie={movieAddHandler} />
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>

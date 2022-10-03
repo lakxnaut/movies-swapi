@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-const MovieForm = () => {
+const MovieForm = (props) => {
     const titleRef = useRef();
     const textRef = useRef();
     const dateRef = useRef();
@@ -13,15 +13,18 @@ const MovieForm = () => {
             text: textRef.current.value,
             date: new Date(dateRef.current.value)
         }
-        console.log(NewMovieObj);
 
         titleRef.current.value = '';
         textRef.current.value = '';
         dateRef.current.value = '';
 
+        props.onAddMovie(NewMovieObj)
+
 
 
     }
+
+
 
 
 
